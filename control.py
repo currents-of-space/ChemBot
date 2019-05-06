@@ -111,6 +111,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_8.clicked.connect(self.openExtractFile)
         self.pushButton_9.clicked.connect(self.openEjectFile)
 
+        # 第五页并列模式按钮链接
+        self.pushButton_10.clicked.connect(self.initialize)
+        self.pushButton_11.clicked.connect(self.stop)
+        self.pushButton_12.clicked.connect(self.executeMini1)
+
+        self.pushButton_13.clicked.connect(self.initialize)
+        self.pushButton_14.clicked.connect(self.stop)
+        self.pushButton_15.clicked.connect(self.executeMini2)
+
+        self.pushButton_16.clicked.connect(self.initialize)
+        self.pushButton_17.clicked.connect(self.stop)
+        self.pushButton_18.clicked.connect(self.executeMini3)
+
+        self.pushButton_19.clicked.connect(self.initialize)
+        self.pushButton_20.clicked.connect(self.stop)
+        self.pushButton_21.clicked.connect(self.executeMini4)
 
 
         self.rdb_exec.clicked.connect(self.run__pumb)
@@ -320,12 +336,59 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         command += self.parity(command)
         return command
 
+    # 第五页的“执行”按钮，一共4个
+    def generateExecuteCommandMini1(self):
+        speed1 = self.lcdNumber_5.value()
+        speed2 = self.lcdNumber_6.value()
+        dest = self.lcdNumber_7.value()
+        count = self.lcdNumber_8.value()
+
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
+            count) + "R" + "\x03"
+        command += self.parity(command)
+        return command
+
+    def generateExecuteCommandMini2(self):
+        speed1 = self.lcdNumber_9.value()
+        speed2 = self.lcdNumber_10.value()
+        dest = self.lcdNumber_11.value()
+        count = self.lcdNumber_12.value()
+
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
+            count) + "R" + "\x03"
+        command += self.parity(command)
+        return command
+
+    def generateExecuteCommandMini3(self):
+        speed1 = self.lcdNumber_13.value()
+        speed2 = self.lcdNumber_14.value()
+        dest = self.lcdNumber_15.value()
+        count = self.lcdNumber_16.value()
+
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
+            count) + "R" + "\x03"
+        command += self.parity(command)
+        return command
+
+    def generateExecuteCommandMini4(self):
+        speed1 = self.lcdNumber_17.value()
+        speed2 = self.lcdNumber_18.value()
+        dest = self.lcdNumber_19.value()
+        count = self.lcdNumber_20.value()
+
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
+            count) + "R" + "\x03"
+        command += self.parity(command)
+        return command
+
+    # 变速模式的抽取命令
     def generateExtractCommand(self, pathIndex, pathLength):
         speed = self.extractSpeedList[pathIndex]
         command = "V" + str(speed) + "P" + str(pathLength) +"R"
         command += self.parity(command)
         return command
 
+    # 变速模式的排出命令
     def generateEjectCommand(self, phase):
         speed = self.ejectSpeedList[phase]
         command = "V" + str(speed) + "D500R"
@@ -355,9 +418,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 print("不能整除，请调整抽取路径数量")
         else:
             print("数据不够，请调整txt文件或者路径数量")
-
-
-
 
     # 变速排出
     def eject(self):
@@ -423,6 +483,47 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         print("写总字节数:", result)
 
+        ser.close()  # 关闭串口
+
+    # 第五页执行按钮
+    def executeMini1(self):
+        command = self.generateExecuteCommandMini1()
+        ser = self.open_serial()
+        print(command)
+        result = ser.write(command.encode("gb2312"))
+        time.sleep(1)
+        result1 = ser.write(command.encode("gb2312"))
+        print("写总字节数:", result)
+        ser.close()  # 关闭串口
+
+    def executeMini2(self, command):
+        command = self.generateExecuteCommandMini2()
+        ser = self.open_serial()
+        print(command)
+        result = ser.write(command.encode("gb2312"))
+        time.sleep(1)
+        result1 = ser.write(command.encode("gb2312"))
+        print("写总字节数:", result)
+        ser.close()  # 关闭串口
+
+    def executeMini3(self, command):
+        command = self.generateExecuteCommandMini3()
+        ser = self.open_serial()
+        print(command)
+        result = ser.write(command.encode("gb2312"))
+        time.sleep(1)
+        result1 = ser.write(command.encode("gb2312"))
+        print("写总字节数:", result)
+        ser.close()  # 关闭串口
+
+    def executeMini4(self, command):
+        command = self.generateExecuteCommandMini4()
+        ser = self.open_serial()
+        print(command)
+        result = ser.write(command.encode("gb2312"))
+        time.sleep(1)
+        result1 = ser.write(command.encode("gb2312"))
+        print("写总字节数:", result)
         ser.close()  # 关闭串口
 
 
